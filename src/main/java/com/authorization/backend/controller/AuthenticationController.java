@@ -19,23 +19,24 @@ public class AuthenticationController {
     private final JwtTokenUtil jwtTokenUtil;
     private final JwtUserDetailsService userDetailsService;
 
+    //인증 성공하면 인증 요청한 username이 들어간 token 발급
     @PostMapping("/authenticate")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest request) {
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody Request request) {
         final Member member = userDetailsService.authenticateByUsernameAndPassword
                 (request.getUsername(), request.password);
-        final String token = "token";
-        return ResponseEntity.ok(new JwtResponse(token));
+        final String token = jwtTokenUtil.generateToken(member.getUsername());
+        return ResponseEntity.ok(new Response(token));
     }
 
     @Data
-    static class JwtRequest {
+    static class Request {
         private String username;
         private String password;
     }
 
     @Data
     @AllArgsConstructor
-    static class JwtResponse {
+    static class Response {
         private String token;
     }
 }

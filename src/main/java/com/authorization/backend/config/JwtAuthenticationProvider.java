@@ -4,6 +4,7 @@ import com.authorization.backend.entity.Member;
 import com.authorization.backend.entity.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -24,6 +25,10 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
         Member member = memberRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username + "이 존재하지 않습니다."));
+
+        if(passwordEncoder.matches(member.getPassword(), password)) {
+            throw new BadCredentialsException("UnAuthorized");
+        }
 
         return new UsernamePasswordAuthenticationToken(username, password);
     }
