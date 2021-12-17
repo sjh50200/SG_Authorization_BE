@@ -7,21 +7,28 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@CrossOrigin
+@Controller
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AuthenticationController {
     private final JwtTokenUtil jwtTokenUtil;
     private final JwtUserDetailsService userDetailsService;
 
+    @PostMapping("/cors")
+    public ResponseEntity<?> test(@RequestBody Request request) {
+        return ResponseEntity.ok(request);
+    }
+
     //인증 성공하면 인증 요청한 username이 들어간 token 발급
     @PostMapping("/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody Request request) {
+        System.out.println(request.getUsername() + request.getPassword());
         final Member member = userDetailsService.authenticateByUsernameAndPassword
                 (request.getUsername(), request.password);
         final String token = jwtTokenUtil.generateToken(member.getUsername());
