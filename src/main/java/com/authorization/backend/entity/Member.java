@@ -19,7 +19,7 @@ public class Member {
     @Column(unique = true, length = 15)
     @NotNull
     private String username;
-    @Column(length = 20)
+    @Column(length = 60)
     @NotNull
     private String password;
     @Column(length = 10)
