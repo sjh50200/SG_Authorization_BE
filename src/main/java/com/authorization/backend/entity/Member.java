@@ -1,5 +1,6 @@
 package com.authorization.backend.entity;
 
+import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,13 +16,23 @@ public class Member {
     @Column(name = "member_id")
     private Long id;
 
-    @Column(unique = true)
+    @Column(unique = true, length = 15)
+    @NotNull
     private String username;
+    @Column(length = 20)
+    @NotNull
     private String password;
+    @Column(length = 10)
+    @NotNull
+    private String role;
+
 
     public Member(String username, String password) {
         this.username = username;
         this.password = password;
+
+        if(username.equals("jhyeonseong")) role = Role.ADMIN.getValue();
+        else role = Role.USER.getValue();
     }
 
     public static Member createMember(String username, String password) {

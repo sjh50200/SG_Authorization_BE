@@ -28,11 +28,12 @@ public class AuthenticationController {
     //인증 성공하면 인증 요청한 username이 들어간 token 발급
     @PostMapping("/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody Request request) {
-        System.out.println(request.getUsername() + request.getPassword());
+//        System.out.println(request.getUsername() + request.getPassword());
         final Member member = userDetailsService.authenticateByUsernameAndPassword
                 (request.getUsername(), request.password);
+        final String userRole = userDetailsService.loadUserRoleByUsername(request.getUsername());
         final String token = jwtTokenUtil.generateToken(member.getUsername());
-        return ResponseEntity.ok(new Response(token));
+        return ResponseEntity.ok(new Response(token, userRole));
     }
 
     @Data
@@ -45,5 +46,6 @@ public class AuthenticationController {
     @AllArgsConstructor
     static class Response {
         private String token;
+        private String userRole;
     }
 }

@@ -14,7 +14,6 @@ import java.util.function.Function;
 @Component
 public class JwtTokenUtil {
     private static final String secret = "jwtpassword";
-
     public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
 
     public String getUsernameFromToken(String token) {

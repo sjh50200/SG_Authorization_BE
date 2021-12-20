@@ -18,7 +18,7 @@ public class MemberController {
 
     //회원가입을 하면 사용자의 정보가 저장된다. 이 때, Bcrypt 암호화 -> success 문자열 반환하면 /authenticate로 접근하게
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody MemberDto memberDto){
+    public ResponseEntity<?> save(@RequestBody MemberDto memberDto) {
         return ResponseEntity.ok(memberRepository.save(Member.createMember(memberDto.getUsername(), passwordEncoder.encode(memberDto.getPassword()))));
     }
 
